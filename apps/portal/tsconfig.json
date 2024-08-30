@@ -1,0 +1,15 @@
+{
+  "extends": "../../shared/tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "noImplicitAny": false,
+    "moduleResolution": "node",
+    "types": ["vite/client"],
+    "paths": {
+      "portals-base/*": ["../portals-base/src/*"]
+    }
+  },
+  "include": ["src/**/*.tsx", "src/**/*.ts"],
+  "files": ["src/types.d.ts"]
+}

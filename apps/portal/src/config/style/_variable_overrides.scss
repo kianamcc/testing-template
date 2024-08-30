@@ -1,0 +1,8 @@
+// Override Portal variables in this file
+
+@use "portals-base/style/variables" with (
+  $primary-action-color: #bac68f,
+  $secondary-action-color: #bac68f,
+  $header-url: "",
+  $footer-url: ""
+);

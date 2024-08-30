@@ -1,0 +1,16 @@
+@use "./style/variables" as Portal;
+
+@use "synapse-react-client/dist/style/main.scss" with (
+  $primary-action-color: Portal.$primary-action-color,
+  $secondary-action-color: Portal.$secondary-action-color,
+  $tertiary-action-color: #f1d285,
+  $primary-bgcolor-rgba: unset
+);
+@use "synapse-react-client/dist/template_style/Index.scss";
+
+@use "Core";
+@use "Markdown";
+@use "Navbar";
+@use "RedirectDialog";
+@use "ToggleSynapseObjects";
+@use "./components/DetailsPage/DetailsPage";

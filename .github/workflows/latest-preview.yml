@@ -1,0 +1,52 @@
+name: Latest preview
+permissions:
+  contents: write
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+on:
+  push:
+jobs:
+  mirror_job:
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, '[latest-preview]')
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Mirror branch to latest-preview branch
+        uses: zofrex/mirror-branch@v1
+        with:
+          target-branch: latest-preview
+          force: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Vercel CLI
+        run: npm i -g vercel@latest
+
+      - name: Create vercel config file
+        run: mkdir -p ~/.vercel
+
+      - name: Set Vercel authentication
+        run: echo $VERCEL_TOKEN > ~/.vercel/token
+
+      - name: Link vercel project
+        run: vercel link --token $VERCEL_TOKEN --yes
+
+      - name: List deployments
+        id: list_deployments
+        run: vercel ls --token $VERCEL_TOKEN --yes > deployments.txt
+
+      - name: Get latest deployment URL
+        id: get_url
+        run: |
+          DEPLOYMENT_URL=$(vercel ls --token=$VERCEL_TOKEN --yes | grep https | head -n 1 | awk '{print $1}')
+          echo "DEPLOYMENT_URL=$DEPLOYMENT_URL"
+          echo "DEPLOYMENT_URL=$DEPLOYMENT_URL" >> $GITHUB_ENV
+          vercel inspect $DEPLOYMENT_URL --token $VERCEL_TOKEN --logs --wait --timeout=5m
+
+      - name: Set alias for latest-preview branch
+        run: |
+          vercel alias set $DEPLOYMENT_URL template-latest-preview.vercel.app --token $VERCEL_TOKEN
