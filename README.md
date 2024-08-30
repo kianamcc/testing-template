@@ -41,7 +41,15 @@ This is a template repository so you can easily create a new repository based on
    cd YOUR_REPOSITORY
    ```
 
-4. To run, in the root of the project, use the following commands:
+4. Build your project to ensure all packages and dependencies are linked and built before use:
+
+   ```bash
+   cd apps
+   cd portal
+   pnpm build
+   ```
+
+5. To run, in the root of the project, use the following commands:
    ```bash
    pnpm i
    pnpm dev
